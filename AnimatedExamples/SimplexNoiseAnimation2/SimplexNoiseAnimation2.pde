@@ -1,4 +1,8 @@
-float noiseScale = 0.02;
+/*
+  Author: Konstantinos Sfikas
+  Date: March 2018
+  Platform: Processing 3.3.6
+*/
 
 float centerX = 10000;
 float centerY = 10000;
@@ -23,9 +27,10 @@ void draw(){
       float currentY = y + centerY;
       
       float value = (float)SimplexNoise.noise(currentX, currentY, z);
-      float remappedValue = RemapValue(value, -1.0, 1.0, 0, 255);
+      float absValue = Math.abs(value);
+      float colorValue = RemapValue(absValue, 0, 1.0, 255, 0);
       
-      color c = color(remappedValue);
+      color c = color(colorValue);
       pixels[index] = c;
       
       index++;
