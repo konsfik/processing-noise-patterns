@@ -1,3 +1,8 @@
+/*
+  Author: Konstantinos Sfikas
+  Date: March 2018
+*/
+
 float noiseScale = 0.02;
 
 float centerX = 10000;
@@ -7,7 +12,7 @@ HeightMap hm;
 
 PImage myImg;
 
-int[] imageSizes = {4096};
+int[] imageSizes = {8192};
 float[] rangesX = {1,4,16,64,256,1024,4096};
 float[] rangesY = {1,4,16,64,256,1024,4096};
 
@@ -34,23 +39,6 @@ void setup(){
             double value = SimplexNoise.noise(currentX, currentY, currentX, currentY);
             float remappedValue = RemapValue((float)value, -1.0f, 1.0f, 64f, 255f);
             color c = color(remappedValue);
-            /*color c = color(0);
-            if(value > 0.6){
-              c = color(255);
-            }
-            else if(value > 0.2){
-              c = color(191);
-            }
-            else if(value > -0.2){
-              c = color(127);
-            }
-            else if(value > -0.6){
-              c = color(63);
-            }
-            else{
-              c = color(0);
-            }*/
-
             myImg.set((int)x,(int)y,c);
           }
         }
