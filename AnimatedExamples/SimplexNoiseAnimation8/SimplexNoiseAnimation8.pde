@@ -8,37 +8,44 @@ float centerX = 10000;
 float centerY = 10000;
 
 float z = 0;
+float rangeX = 6;
+float rangeY = 6;
+float speed = 0.015;
 
 void setup(){
-  size(400,400);
+  size(800,800);
 }
 
 void draw(){
-  z += 0.005;
+  z += speed;
   // centerX += 0.035;
   loadPixels();
   int index = 0;
   for(float j = 0; j < height; j++){
     for(float i = 0; i < width; i++){
       //int index = y * width + x;
-      float x = RemapValue(i, 0, width, 0, 10.0);
-      float y = RemapValue(j, 0, height,0, 10.0);
+      float x = RemapValue(i, 0, width, -rangeX/2, rangeX/2);
+      float y = RemapValue(j, 0, height, -rangeY/2, rangeY/2);
       float currentX = x + centerX;
       float currentY = y + centerY;
       
       float value = (float)SimplexNoise.noise(currentX, currentY, z);
-      
-      color c = color(0);
-      
-      if(value<-0.0){
-        c = color(0);
-      }
-      else if(value<0.25){
-        c = color(127);
+      value = RemapValue(value, -1, 1, -0.75, 1);
+      // value = Math.abs(value);
+      int r = 0;
+      int g = 0;
+      int b = 0;
+      if(value > 0){
+        r = (int)RemapValue(value, 0, 1, 20, 225);
+        g = (int)RemapValue(value, 0, 1, 30, 200);
+        b = (int)RemapValue(value, 0, 1, 10, 160);
       }
       else{
-        c = color(255);
+        r = (int)RemapValue(value, 0, -0.75, 20, 100);
+        g = (int)RemapValue(value, 0, -0.75, 30, 200);
+        b = (int)RemapValue(value, 0, -0.75, 10, 160);
       }
+      color c = color(r,g,b);
       pixels[index] = c;
       
       index++;

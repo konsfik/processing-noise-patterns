@@ -34,7 +34,7 @@ void draw(){
   updatePixels();
 }
 
-public float RemapValue(float initVal, float initRangeMin, float initRangeMax, float finRangeMin, float finRangeMax){
-  float finalVal = finRangeMin + (initVal-initRangeMin)*(finRangeMax-finRangeMin)/(initRangeMax-initRangeMin);
+public float RemapValue(float val, float min1, float max1, float min2, float max2){
+  float finalVal = min2 + (val - min1) * (max2 - min2) / (max1 - min1);
   return finalVal;
 }

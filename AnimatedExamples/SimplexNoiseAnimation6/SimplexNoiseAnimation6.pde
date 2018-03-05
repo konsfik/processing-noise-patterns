@@ -4,32 +4,37 @@
   Platform: Processing 3.3.6
 */
 
-float centerX = 0;
-float centerY = 0;
+float centerX = 10000;
+float centerY = 10000;
 
 float z = 0;
+float rangeX = 1;
+float rangeY = 100;
+float speed = 0.015;
 
 void setup(){
-  size(400,400);
+  size(800,800);
 }
 
 void draw(){
-  z += 0.015;
+  z += speed;
   // centerX += 0.035;
   loadPixels();
   int index = 0;
   for(float j = 0; j < height; j++){
     for(float i = 0; i < width; i++){
       //int index = y * width + x;
-      float x = RemapValue(i, 0, width, -10.0, 10.0);
-      float y = RemapValue(j, 0, height, -10.0, 10.0);
+      float x = RemapValue(i, 0, width, -rangeX/2, rangeX/2);
+      float y = RemapValue(j, 0, height, -rangeY/2, rangeY/2);
       float currentX = x + centerX;
       float currentY = y + centerY;
       
       float value = (float)SimplexNoise.noise(currentX, currentY, z);
-      float colorValue = RemapValue(value, -1.0, 1.0, 0, 255);
-      
-      color c = color(colorValue);
+      value = Math.abs(value);
+      int r = (int)RemapValue(value, 0, 1, 120, 225);
+      int g = (int)RemapValue(value, 0, 1, 90, 200);
+      int b = (int)RemapValue(value, 0, 1, 110, 160);
+      color c = color(r,g,b);
       pixels[index] = c;
       
       index++;
