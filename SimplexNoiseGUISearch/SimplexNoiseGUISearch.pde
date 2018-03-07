@@ -7,8 +7,6 @@
 */
 
 
-
-
 float centerX = 10000;
 float centerY = 10000;
 
@@ -22,6 +20,8 @@ float speed = 0.015;
 float rangeX = 6;
 float rangeY = 6;
 float ZTranslation = 0;
+float heightRangeScale = 1;
+
 
 void setup(){
   size(400,400);
@@ -31,11 +31,13 @@ void setup(){
 void draw(){
   // z += speed;
   // centerX += 0.035;
-  ZTranslation = (float)mouseX / 200;
+  // ZTranslation = (float)mouseX / 200;
+  // heightRangeScale = RemapValue(mouseY, 0, height, 0.2,2.0);
   loadPixels();
   int index = 0;
-  float maxV = (float)Math.sqrt(3.0)/2.0;
-  println(maxV);
+  // calculate height range
+  float heightRange = ((float)Math.sqrt(3.0)/2.0);
+  println(heightRangeScale);
   for(float j = 0; j < height; j++){
     for(float i = 0; i < width; i++){
       //int index = y * width + x;
@@ -44,24 +46,27 @@ void draw(){
       float currentX = x + centerX;
       float currentY = y + centerY;
       
-      float value = (float)SimplexNoise.noise(currentX, currentY, ZTranslation);
+      float simplexValue = (float)SimplexNoise.noise(
+        currentX, 
+        currentY, 
+        ZTranslation
+      );
       
-      value = RemapValue(value, -maxV, maxV, -1, 1);
-      // value = Math.abs(value);
-      int r = 0;
-      int g = 0;
-      int b = 0;
-      if(value > 0){
-        r = (int)RemapValue(value, 0, 1, 20, 225);
-        g = (int)RemapValue(value, 0, 1, 30, 200);
-        b = (int)RemapValue(value, 0, 1, 10, 160);
-      }
-      else{
-        r = (int)RemapValue(value, 0, -1, 20, 100);
-        g = (int)RemapValue(value, 0, -1, 30, 200);
-        b = (int)RemapValue(value, 0, -1, 10, 160);
-      }
-      color c = color(r,g,b);
+      /* simplexValue = (float)RemapValue(
+        simplexValue, 
+        -heightRange, heightRange, 
+        -1.0, 1.0
+      );*/
+      
+      simplexValue = Math.abs(simplexValue);
+      
+      int colorValue = (int)RemapValue(
+        simplexValue, 
+        0, 1,
+        0.0,255.0
+      );
+      
+      color c = color(colorValue);
       pixels[index] = c;
       
       index++;
