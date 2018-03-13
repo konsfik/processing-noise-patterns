@@ -1,5 +1,3 @@
-
-
 /*
   Author: Konstantinos Sfikas
   Date: March 2018
@@ -22,6 +20,9 @@ float rangeY = 6;
 float ZTranslation = 0;
 float heightRangeScale = 1;
 
+float minimumBrightness = 0.0;
+float maximumBrightness = 255.0;
+
 
 void setup(){
   size(400,400);
@@ -29,15 +30,13 @@ void setup(){
 }
 
 void draw(){
-  // z += speed;
-  // centerX += 0.035;
-  // ZTranslation = (float)mouseX / 200;
-  // heightRangeScale = RemapValue(mouseY, 0, height, 0.2,2.0);
+  ZTranslation += speed;
+  
+  float yPercent = (float)mouseY / (float)height;
+  float xPercent = (float)mouseX / (float)width;
+  
   loadPixels();
   int index = 0;
-  // calculate height range
-  float heightRange = ((float)Math.sqrt(3.0)/2.0);
-  println(heightRangeScale);
   for(float j = 0; j < height; j++){
     for(float i = 0; i < width; i++){
       //int index = y * width + x;
@@ -52,19 +51,20 @@ void draw(){
         ZTranslation
       );
       
-      /* simplexValue = (float)RemapValue(
-        simplexValue, 
-        -heightRange, heightRange, 
-        -1.0, 1.0
-      );*/
-      
       simplexValue = Math.abs(simplexValue);
+      
+      simplexValue *= xPercent * 4 - 2;
+      simplexValue += yPercent * 4 - 2;
       
       int colorValue = (int)RemapValue(
         simplexValue, 
-        0, 1,
-        0.0,255.0
+        -1, 1,
+        minimumBrightness,maximumBrightness
       );
+      
+      if(colorValue < 0) colorValue = 0;
+      else if(colorValue > 255) colorValue = 255;
+      // else colorValue = 127;
       
       color c = color(colorValue);
       pixels[index] = c;
