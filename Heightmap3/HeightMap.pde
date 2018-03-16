@@ -61,7 +61,9 @@ public class HeightMap{
     for(float j = 0; j < _numCellsY; j++){
       for(float i = 0; i < _numCellsX; i++){
         float x = RemapValue(i, 0, _numCellsX, -rangeX/2, rangeX/2);
+        x += _centerX;
         float y = RemapValue(j, 0, _numCellsY, -rangeY/2, rangeY/2);
+        y += _centerY;
         float simplexValue = (float)SimplexNoise.noise(
           x, 
           y, 
