@@ -30,6 +30,7 @@ public class HeightMap{
     _translationZ = translationZ;
     
     _cells = new float[_numCellsX * _numCellsY];
+    UpdateSelf();
   }
   
   
@@ -62,8 +63,35 @@ public class HeightMap{
     }
   }
   
+  public void AddMap(HeightMap hm){
+    float[] otherMapCells = hm.GetCells();
+    for(int i = 0; i < otherMapCells.length; i++){
+      _cells[i] += otherMapCells[i];
+    }
+  }
+  public void MultiplyMap(HeightMap hm){
+    float[] otherMapCells = hm.GetCells();
+    for(int i = 0; i < otherMapCells.length; i++){
+      _cells[i] *= otherMapCells[i];
+    }
+  }
+  
   public float[] GetCells(){
     return _cells;
+  }
+  
+  public void AbsoluteSelf(){
+    for(int i = 0; i < _cells.length; i++){
+      _cells[i] = Math.abs(_cells[i]);
+    }
+  }
+  
+  public void SetRange(float from, float to){
+    float min = FindMinimumValue();
+    float max = FindMaximumValue();
+    for(int i = 0; i < _cells.length; i++){
+      _cells[i] = RemapValue(_cells[i], min,max,from,to);
+    }
   }
   
   public void NormalizeSelf(){
@@ -71,6 +99,14 @@ public class HeightMap{
     float max = FindMaximumValue();
     for(int i = 0; i < _cells.length; i++){
       _cells[i] = RemapValue(_cells[i], min,max,0,255);
+    }
+  }
+  
+  public void ReverseNormalizeSelf(){
+    float min = FindMinimumValue();
+    float max = FindMaximumValue();
+    for(int i = 0; i < _cells.length; i++){
+      _cells[i] = RemapValue(_cells[i], min,max,255,0);
     }
   }
   
