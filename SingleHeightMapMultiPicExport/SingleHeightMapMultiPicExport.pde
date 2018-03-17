@@ -22,32 +22,44 @@ float[] rangesX = {2,4,8,16,32,64,128};
 float[] rangesY = {2,4,8,16,32,64,128};
 float[] minHeightRanges = {0,63};
 float[] maxHeightRanges = {191,255};
-
+float[] zTranslationValues = {0,100,200,400};
+int[] picSizes = {64,128,256};
 
 void setup(){
-  // set the screen size to 800 x 800 pixels
   size(100,100);  
+  
+  int numImages = rangesX.length * rangesY.length 
+    * minHeightRanges.length * maxHeightRanges.length 
+    * zTranslationValues.length * picSizes.length;
   int cnt = 0;
   for(float rangeX : rangesX){
     for(float rangeY : rangesY){
       for(float minHeightRange : minHeightRanges){
         for(float maxHeightRange : maxHeightRanges){
-          float z = random(1000);
-          hm1 = new HeightMap(1024,1024,rangeX,rangeY,0,0,z);
-          hm1.SetRange(minHeightRange,maxHeightRange);
-          myImage = createImage(1024,1024,RGB);
-          float[] cells = hm1.GetCells();
-          for(int i = 0; i < cells.length; i++){
-            myImage.pixels[i] = color((float)cells[i]);
+          for(float zTranslationValue : zTranslationValues){
+            for(int picSize : picSizes){
+              hm1 = new HeightMap(picSize,picSize,rangeX,rangeY,0,0,zTranslationValue);
+              hm1.SetRange(minHeightRange,maxHeightRange);
+              myImage = createImage(picSize,picSize,RGB);
+              float[] cells = hm1.GetCells();
+              for(int i = 0; i < cells.length; i++){
+                myImage.pixels[i] = color((float)cells[i]);
+              }
+              String folderName = "Exports/";
+              folderName += "size-" + str(picSize) + "/";
+              String imageName = folderName + "img-";
+              imageName += "rX-" + str(rangeX) + "-";
+              imageName += "rY-" + str(rangeY) + "-";
+              imageName += "mHr-" + str((int)minHeightRange) + "-";
+              imageName += "MHr-" + str((int)maxHeightRange) + "-";
+              imageName += "px-" + str(picSize) + "-";
+              imageName += "zV-" + str(zTranslationValue) + "-";
+              imageName += ".png";
+              myImage.save(imageName);
+              println("Image " + str(cnt) + " / " + str(numImages));
+              cnt++;
+            }
           }
-          String imageName = "Exports/img-";
-          imageName += "rX-" + str(rangeX) + "-";
-          imageName += "rY-" + str(rangeY) + "-";
-          imageName += "minhr-" + str((int)minHeightRange) + "-";
-          imageName += "maxhr-" + str((int)maxHeightRange) + "-";
-          imageName += ".png";
-          myImage.save(imageName);
-          cnt++;
         }
       }
     }
