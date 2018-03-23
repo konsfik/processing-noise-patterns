@@ -18,12 +18,12 @@
 HeightMap hm1;
 PImage myImage;
 
-float[] rangesX = {2,4,8,16,32,64,128};
-float[] rangesY = {2,4,8,16,32,64,128};
-float[] minHeightRanges = {0,85};
-float[] maxHeightRanges = {170,255};
-float[] zTranslationValues = {0,100,200,400};
-int[] picSizes = {64,128,256,512,1024,2048,4096};
+float[] rangesX = {2,4,8,16,32};
+float[] rangesY = {2,4,8,16,32};
+float[] minHeightRanges = {0,63,127,191,255};
+float[] maxHeightRanges = {0,63,127,191,255};
+float[] zTranslationValues = {0,100};
+int[] picSizes = {4096};
 
 void setup(){
   size(100,100);  
@@ -32,18 +32,26 @@ void setup(){
     * minHeightRanges.length * maxHeightRanges.length 
     * zTranslationValues.length * picSizes.length;
   int cnt = 0;
-  for(float rangeX : rangesX){
-    for(float rangeY : rangesY){
-      for(float minHeightRange : minHeightRanges){
-        for(float maxHeightRange : maxHeightRanges){
+  int numRangesX = rangesX.length;
+  int numRangesY = rangesY.length;
+  int numMinHeightRanges = minHeightRanges.length;
+  int numMaxHeightRanges = maxHeightRanges.length;
+  for(int i = 0; i < numRangesX; i++){
+    for(int j = i; j < numRangesY; j++){
+      for(int k = 0; k <= numMinHeightRanges-2; k++){
+        for(int m = k+1; m <= numMaxHeightRanges-1; m++){
           for(float zTranslationValue : zTranslationValues){
             for(int picSize : picSizes){
+              float rangeX = rangesX[i];
+              float rangeY = rangesY[j];
+              float minHeightRange = minHeightRanges[k];
+              float maxHeightRange = maxHeightRanges[m];
               hm1 = new HeightMap(picSize,picSize,rangeX,rangeY,0,0,zTranslationValue);
               hm1.SetRange(minHeightRange,maxHeightRange);
               myImage = createImage(picSize,picSize,RGB);
               float[] cells = hm1.GetCells();
-              for(int i = 0; i < cells.length; i++){
-                myImage.pixels[i] = color((float)cells[i]);
+              for(int cc = 0; cc < cells.length; cc++){
+                myImage.pixels[cc] = color((float)cells[cc]);
               }
               String folderName = "Exports/";
               folderName += "size-" + str(picSize) + "/";
