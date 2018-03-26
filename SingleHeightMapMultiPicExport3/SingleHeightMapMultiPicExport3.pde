@@ -23,7 +23,7 @@ float[] rangesY = {2,4,8,16,32};
 float[] minHeightRanges = {0,63,127,191,255};
 float[] maxHeightRanges = {0,63,127,191,255};
 float[] zTranslationValues = {0,100};
-int[] picSizes = {4096};
+int[] picSizes = {512};
 
 void setup(){
   size(100,100);  
