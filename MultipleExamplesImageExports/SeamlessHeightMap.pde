@@ -13,8 +13,6 @@ public class SeamlessHeightMap{
   
   private float _rangeX;
   private float _rangeY;
-  private float _overlapX;
-  private float _overlapY;
   private float _centerX;
   private float _centerY;
   private float _translationZ;
@@ -25,8 +23,6 @@ public class SeamlessHeightMap{
     int numCellsY,
     float rangeX,
     float rangeY,
-    float overlapX, 
-    float overlapY,
     float centerX,
     float centerY,
     float translationZ){
@@ -35,8 +31,6 @@ public class SeamlessHeightMap{
     _numCellsY = numCellsY;
     _rangeX = rangeX;
     _rangeY = rangeY;
-    _overlapX = overlapX;
-    _overlapY = overlapY;
     _centerX = centerX;
     _centerY = centerY;
     _translationZ = translationZ;
@@ -47,7 +41,7 @@ public class SeamlessHeightMap{
   
   
   public void UpdateSelf(){
-    UpdateSelf(_rangeX, _rangeY, _centerX, _centerY, _overlapX, _overlapY, _translationZ);
+    UpdateSelf(_rangeX, _rangeY, _centerX, _centerY, _translationZ);
   }
   
   public void UpdateSelf(
@@ -55,44 +49,46 @@ public class SeamlessHeightMap{
     float rangeY,
     float centerX,
     float centerY,
-    float overlapX,
-    float overlapY,
-    float translationZ){
-      
+    float translationZ
+    ){
     _rangeX = rangeX;
     _rangeY = rangeY;
     _centerX = centerX;
     _centerY = centerY;
-    _overlapX = overlapX;
-    _overlapY = overlapY;
     _translationZ = translationZ;
     
     int index = 0;
     for(float j = 0; j < _numCellsY; j++){
       for(float i = 0; i < _numCellsX; i++){
+        
         float x = RemapValue(i, 0, _numCellsX, -rangeX/2, rangeX/2);
         x += _centerX;
         float y = RemapValue(j, 0, _numCellsY, -rangeY/2, rangeY/2);
         y += _centerY;
-        if( // inner area
-          (x > _centerX - _rangeX / 2 + _overlapX)
-          &&
-          (x < _centerX + _rangeX / 2 - _overlapX)
-          &&
-          (y > _centerY - _rangeY / 2 + _overlapY)
-          &&
-          (Y < _centerY + _rangeY / 2 - _overlapY)
-        ){
-          float simplexValue = (float)SimplexNoise.noise(
-            x, 
-            y, 
-            _translationZ
+
+        float s = x / rangeX;
+        float t = y / rangeY;
+        float x1 = 100;
+        float y1 = 200;
+        float x2 = 110;
+        float y2 = 115;
+        
+        float dx = x2 - x1;
+        float dy = y2 - y1;
+        
+        float nx = x1 + cos(s*2*PI)*dx/(2*PI);
+        float ny = y1 + cos(t*2*PI)*dy/(2*PI);
+        float nz = x1 + sin(s*2*PI)*dx/(2*PI);
+        float nw = y1 + sin(t*2*PI)*dy/(2*PI);
+
+        
+        float simplexValue = (float)SimplexNoise.noise(
+            nx, 
+            ny, 
+            nz,
+            nw
           );
-        }
-        else{
-          x = 0;
-          y = 0;
-        }
+        
         _cells[index] = simplexValue;
         index++;
       }

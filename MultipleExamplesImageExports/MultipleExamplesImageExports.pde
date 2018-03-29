@@ -26,6 +26,7 @@ void setup(){
   Example3();
   Example4();
   Example5();
+  Example6();
 }
 
 void draw(){
@@ -112,15 +113,15 @@ public void Example5(){
 
 public void Example6(){
   SeamlessHeightMap hm1 = new SeamlessHeightMap(
-    1024,1024,
+    2048,2048,
     5,5,
-    1,1,
     0,0,
-    100
+    200
   );
-  hm1.SetRange(0,255);
+  
+  hm1.SetRange(255,0);
   float[] cells = hm1.GetCells();
-  PImage myImage = createImage(1024,1024,RGB);
+  PImage myImage = createImage(2048,2048,RGB);
   for(int cc = 0; cc < cells.length; cc++){
     myImage.pixels[cc] = color((float)cells[cc]);
   }
